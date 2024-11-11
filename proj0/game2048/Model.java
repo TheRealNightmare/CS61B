@@ -1,5 +1,6 @@
 package game2048;
 
+import javax.swing.*;
 import java.util.Formatter;
 import java.util.Observable;
 
@@ -138,6 +139,13 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        for(int i=0; i<b.size(); i++){
+            for(int j=0;j<b.size();j++){
+                if(b.tile(i,j)== null){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -147,7 +155,13 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        for(int i=0; i<b.size(); i++){
+            for(int j=0; j<b.size(); j++){
+                if((b.tile(i,j)!=null)&&b.tile(i,j).value()==MAX_PIECE){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -158,10 +172,35 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        if((Model.emptySpaceExists(b))||Model.adjacentSame(b)){
+            return true;
+        }
         return false;
     }
 
+    public static boolean adjacentSame(Board b){
+        for(int i=0;i<b.size();i++){
+            for(int j=0;j<b.size();j++){
+                int nx = i+1;
+                int ny = j+1;
+                if((adjacentValueCheck(b,i,j,i,ny))||(adjacentValueCheck(b,i,j,nx,j))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean  adjacentValueCheck(Board b, int x, int y, int nx, int ny){
+        if(nx<b.size()&&ny<b.size()){
+            int valTwo = b.tile(nx,ny).value();
+            int valOne = b.tile(x,y).value();
+            if(valTwo==valOne){
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
      /** Returns the model as a string, used for debugging. */
